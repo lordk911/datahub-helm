@@ -75,19 +75,15 @@ neo4j:
 
 mysql:
   enabled: true
-  global:
-    # storageClass: cstor-csi-disk
-    storageClass: ""
-  primary: 
-    startupProbe:
-      initialDelaySeconds: 600
-    livenessProbe:
-      initialDelaySeconds: 180
-    readinessProbe:
-      initialDelaySeconds: 180   
   auth:
     # For better security, add mysql-secrets k8s secret with mysql-root-password, mysql-replication-password and mysql-password
     existingSecret: mysql-secrets
+      #primary:
+      #persistence: 
+      #storageClass: "cstor-csi-disk"
+        #secondary: 
+        #persistence: 
+        #storageClass: "cstor-csi-disk"
 
 postgresql:
   enabled: false
