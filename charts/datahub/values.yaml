@@ -59,8 +59,7 @@ datahub-frontend:
   service:
     extraLabels: {}
   # Optionaly specify service type for datahub-frontend: LoadBalancer, ClusterIP or NodePort, by default: LoadBalancer
-  service:
-     type: ClusterIP
+    type: ClusterIP
 
 acryl-datahub-actions:
   enabled: true
