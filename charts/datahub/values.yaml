@@ -5,6 +5,10 @@ datahub-gms:
   image:
     repository: m.daocloud.io/docker.io/linkedin/datahub-gms
     # tag: "v0.11.0 # defaults to .global.datahub.version
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   resources:
     limits:
       memory: 2Gi
@@ -35,6 +39,10 @@ datahub-frontend:
   image:
     repository: linkedin/datahub-frontend-react
     # tag: "v0.11.0" # # defaults to .global.datahub.version
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   resources:
     limits:
       memory: 1400Mi
@@ -44,10 +52,9 @@ datahub-frontend:
   # Set up ingress to expose react front-end
   ingress:
     enabled: false
-    hosts:
-      - host: seal-k8s.datahub.com
-        paths: [/]
-  defaultUserCredentials: 
+  defaultUserCredentials: {}
+  service:
+    extraLabels: {}
     # randomAdminPassword: true
     # You can also set specific passwords for default users
     manualValues: |
@@ -62,6 +69,10 @@ acryl-datahub-actions:
   image:
     repository: acryldata/datahub-actions
     tag: "v0.0.13"
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   # mount the k8s secret as a volume in the container, each key name is mounted as a file on the mount path /etc/datahub/ingestion-secret-files
   # ingestionSecretFiles:
   #   name: ${K8S_SECRET_NAME}
@@ -78,6 +89,10 @@ datahub-mae-consumer:
   image:
     repository: linkedin/datahub-mae-consumer
     # tag: "v0.11.0" # defaults to .global.datahub.version
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   resources:
     limits:
       memory: 1536Mi
@@ -90,6 +105,10 @@ datahub-mce-consumer:
   image:
     repository: linkedin/datahub-mce-consumer
     # tag: "v0.11.0" # defaults to .global.datahub.version
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   resources:
     limits:
       memory: 1536Mi
@@ -108,6 +127,10 @@ elasticsearchSetupJob:
   image:
     repository: m.daocloud.io/docker.io/linkedin/datahub-elasticsearch-setup
     # tag: "v0.11.0" # defaults to .global.datahub.version
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   resources:
     limits:
       cpu: 500m
@@ -138,6 +161,10 @@ kafkaSetupJob:
   image:
     repository: linkedin/datahub-kafka-setup
     # tag: "v0.11.0" # defaults to .global.datahub.version
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   resources:
     limits:
       cpu: 500m
@@ -168,6 +195,10 @@ mysqlSetupJob:
   image:
     repository: acryldata/datahub-mysql-setup
     # tag: "v0.11.0" # defaults to .global.datahub.version
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   resources:
     limits:
       cpu: 500m
@@ -203,6 +234,10 @@ postgresqlSetupJob:
   image:
     repository: acryldata/datahub-postgres-setup
     # tag: "v0.11.0" # defaults to .global.datahub.version
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   resources:
     limits:
       cpu: 500m
@@ -246,6 +281,11 @@ datahubUpgrade:
   batchSize: 1000
   batchDelayMs: 100
   noCodeDataMigration:
+    image:
+      # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+      # to run
+      command:
+      args: []
     sqlDbType: "MYSQL"
     # sqlDbType: "POSTGRES"
   podSecurityContext: {}
@@ -265,6 +305,11 @@ datahubUpgrade:
     #   image: my-image
     #   imagePullPolicy: Always
   cleanupJob:
+    image:
+      # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+      # to run
+      command:
+      args: []
     resources:
       limits:
         cpu: 500m
@@ -280,6 +325,11 @@ datahubUpgrade:
       #   image: my-image
       #   imagePullPolicy: Always
   restoreIndices:
+    image:
+      # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+      # to run
+      command:
+      args: []
     resources:
       limits:
         cpu: 500m
@@ -306,6 +356,10 @@ datahubSystemUpdate:
   image:
     repository: m.daocloud.io/docker.io/acryldata/datahub-upgrade
     # tag:
+    # Add custom command / arguments to this job.  Useful if you need a custom startup or shutdown script
+    # to run
+    # command: customCommand
+    # args: []
   podSecurityContext: {}
     # fsGroup: 1000
   securityContext: {}
@@ -510,6 +564,7 @@ global:
       maxRequestSize: "5242880"  # 5MB
     consumer:
       maxPartitionFetchBytes: "5242880"  # 5MB
+      stopContainerOnDeserializationError: true
     ## For AWS MSK set this to a number larger than 1
     # partitions: 3
     # replicationFactor: 3
@@ -585,6 +640,7 @@ global:
   datahub:
     version: v0.12.1
     gms:
+      protocol: "http"
       port: "8080"
       nodePort: "30001"
 
@@ -620,7 +676,7 @@ global:
 
     managed_ingestion:
       enabled: true
-      defaultCliVersion: "0.12.0"
+      defaultCliVersion: "0.12.1.1"
 
     metadata_service_authentication:
       enabled: true
